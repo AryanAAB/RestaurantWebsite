@@ -1,0 +1,75 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="header">
+        <div class="logo-container">
+            <a href="{% url 'menu' %}" class="logo">
+                <img src="{% static 'images/logo.png' %}" alt="My Restaurant" class="logoImage">
+            </a>
+        </div>
+        <p class="restaurant-name">Delicious Bites Menu</p>
+        <div class="header-right">
+            {% if user.is_authenticated %}
+                <form action="{% url 'logout_view' %}" method="post" class="inline-form">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-button">Logout</button>
+                </form>
+                <a class="active view-cart" href="{% url 'view_cart' %}">View Cart</a>
+            {% endif %}
+        </div>
+    </div>
+    <h2>Search Results for "{{ query }}"</h2>
+    
+    <div class="container mt-4">
+        <div class="row" id="menu-items">
+            {% if menu_items %}
+                {% for item in menu_items %}
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}" style="height:300px">
+                            <div class="card-body">
+                                <h5 class="card-title" style="font-weight: bold; color: orange;">{{ item.name }}</h5>
+                                <p class="card-text" style="color: green;">{{ item.description }}</p>
+                                <p class="card-text" style="color: red;">Price: ${{ item.price }}</p>
+                            </div>
+                            <div class="card-footer">
+                                <form action="{% url 'add_to_cart' item.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary btn-block">Add to Cart</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No results found for "{{ query }}".</p>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if messages %}
+        <div id="messages" class="message-container">
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    <style>
+        .message-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+        .alert {
+            margin-bottom: 10px;
+        }
+    </style>
+{% endblock content %}

@@ -1,0 +1,63 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block content %}
+    <div class="header">
+        <div class="logo-container">
+            <a href="{% url 'homepage' %}" class="logo">
+                <img src="{% static 'images/logo.png' %}" alt="My Restaurant" class="logoImage">
+            </a>
+        </div>
+        <p class="restaurant-name">Delicious Bites</p>
+        <div class="header-right">
+            <a class="active" href="{% url 'login' %}">Login</a>
+            <a href="{% url 'signup' %}">Sign Up</a>
+        </div>
+    </div> 
+    <section class="restaurant-info">
+        <div class="info-content">
+            <h1>Welcome to Delicious Bites</h1>
+            <p>Welcome to Delicious Bites, nestled in the vibrant heart of the city. We invite you to indulge in a culinary journey like no other, where each dish is crafted with care using fresh, locally-sourced ingredients. Our menu celebrates a fusion of traditional flavors and innovative culinary techniques, offering a delightful blend of classic favorites and exciting new creations. Whether you're joining us for a casual lunch, a romantic dinner, or a special celebration, our commitment to quality and flavor ensures a memorable dining experience. Discover the essence of fine dining with us at Delicious Bites, where every bite tells a story of passion and excellence in food.</p>
+            
+            <div class="specialties">
+                <h2>Our Specialties</h2>
+                <ul>
+                    <li><i class="fas fa-star"></i> Signature dishes crafted by our award-winning chefs</li>
+                    <li><i class="fas fa-star"></i> Seasonal menus that highlight the best flavors of each season</li>
+                    <li><i class="fas fa-star"></i> Extensive wine and cocktail selections to complement your meal</li>
+                    <li><i class="fas fa-star"></i> Vegan and gluten-free options available</li>
+                </ul>
+            </div>
+            
+            <div class="ambiance">
+                <h2>Ambiance</h2>
+                <p>Experience our warm and inviting ambiance, perfect for intimate dinners, family gatherings, or special occasions. Our attentive staff ensures a memorable dining experience.</p>
+            </div>
+            
+            <div class="services">
+                <h2>Services</h2>
+                <ul>
+                    <li><i class="fas fa-concierge-bell"></i> Reservations available</li>
+                    <li><i class="fas fa-wifi"></i> Free Wi-Fi</li>
+                    <li><i class="fas fa-parking"></i> Valet parking service</li>
+                    <li><i class="fas fa-gift"></i> Gift cards available</li>
+                </ul>
+            </div>
+            
+            <div class="testimonials">
+                <h2>What Our Customers Say</h2>
+                <div class="testimonial">
+                    <blockquote>
+                        "Absolutely fantastic dining experience! The food was exquisite and the service impeccable."
+                    </blockquote>
+                    <cite>- Emily Johnson</cite>
+                </div>
+                <div class="testimonial">
+                    <blockquote>
+                        "Delicious Bites never disappoints! The ambiance is perfect for any occasion."
+                    </blockquote>
+                    <cite>- Mark Davis</cite>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}

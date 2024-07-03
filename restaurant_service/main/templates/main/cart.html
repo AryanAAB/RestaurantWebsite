@@ -1,0 +1,105 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="header">
+        <div class="logo-container">
+            <a href="{% url 'menu' %}" class="logo">
+                <img src="{% static 'images/logo.png' %}" alt="My Restaurant" class="logoImage">
+            </a>
+        </div>
+        <p class="restaurant-name">Delicious Bites My Cart</p>
+        <div class="header-right">
+            {% if user.is_authenticated %}
+                <form action="{% url 'logout_view' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-button">Logout</button>
+                </form>
+                <a class="active" href="{% url 'menu' %}">Menu Page</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="container mt-4">
+        {% if cart_items %}
+            <div class="row">
+                {% for item in cart_items %}
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <img src="{{ item.item.image.url }}" class="card-img-top" alt="{{ item.item.name }}" style="height:300px">
+                            <div class="card-body">
+                                <h5 class="card-title" style="font-weight: bold; color: orange;">{{ item.item.name }}</h5>
+                                <p class="card-text" style="color: green;">{{ item.item.description }}</p>
+                                <p class="card-text" style="color: red;">Price: ${{ item.item.price }}</p>
+                            </div>
+                            <div class="card-footer">
+                                <div class="quantity-controls">
+                                    <form action="{% url 'view_cart' %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="item_id" value="{{ item.id }}">
+                                        <button type="submit" name="action" value="decrease" class="btn btn-secondary btn-sm">-</button>
+                                        <span>{{ item.quantity }}</span>
+                                        <button type="submit" name="action" value="increase" class="btn btn-secondary btn-sm">+</button>
+                                    </form>
+                                </div>
+                                <form action="{% url 'remove_from_cart' %}" method="post" class="remove-form">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="item_id" value="{{ item.id }}">
+                                    <button type="submit" class="btn btn-danger btn-sm">Remove from Cart</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Your cart is empty.</p>
+        {% endif %}
+    </div>
+    {% if messages %}
+        <div id="messages" class="message-container">
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <style>
+        .message-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+        .alert {
+            margin-bottom: 10px;
+        }
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .quantity-controls form {
+            display: inline;
+        }
+        .quantity-controls button {
+            margin: 0 5px;
+        }
+        .card-footer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .card-footer .remove-form {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        .remove-form button {
+            margin-top: 10px;
+        }
+    </style>
+{% endblock content %}

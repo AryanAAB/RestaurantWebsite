@@ -1,0 +1,64 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="header">
+        <div class="logo-container">
+            <a href="{% url 'homepage' %}" class="logo">
+                <img src="{% static 'images/logo.png' %}" alt="My Restaurant" class="logoImage">
+            </a>
+        </div>
+        <p class="restaurant-name">Delicious Bites</p>
+        <div class="header-right">
+            <a class="active"  href="{% url 'homepage' %}">Home</a>
+            <a href="{% url 'login' %}">Login</a>
+        </div>
+    </div> 
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="text-center">Sign Up</h3>
+                    </div>
+                    <div class="card-body">
+                        {% if form.errors %}
+                            <div class="alert alert-danger">
+                                <h6 class="alert-heading">Oops! Please correct the following errors:</h6>
+                                <ul class="mb-0">
+                                    {% for field, errors in form.errors.items %}
+                                        {% for error in errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                        <form method="post">
+                            {% csrf_token %}
+                            {% for field in form %}
+                                <div class="form-group">
+                                    <label for="{{ field.id_for_label }}" class="text-primary">{{ field.label }}</label>
+                                    {{ field }}
+                                    {% if field.help_text %}
+                                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                            <button type="submit" class="btn btn-primary btn-block mt-3">Sign Up</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <style>
+        .form-group label.text-primary {
+            color: #007bff;
+        }
+        .form-group small.form-text {
+            color: #6c757d;
+        }
+    </style>
+{% endblock content %}
