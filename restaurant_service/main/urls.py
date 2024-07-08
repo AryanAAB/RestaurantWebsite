@@ -1,7 +1,6 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from django.views.generic import RedirectView
 from . import views
 
 urlpatterns = [
@@ -15,4 +14,9 @@ urlpatterns = [
     path('cart/', views.view_cart, name='view_cart'),
     path('remove_from_cart/', views.remove_from_cart, name='remove_from_cart'),
     path('search/', views.search_results, name='search_results'),
+    path('update_cart/', views.update_cart, name='update_cart'),
+    path('confirm/', views.confirm, name='confirm'),
+    path('place_order/', views.place_order, name='place_order'),
+    path('orders/', views.order_list, name='order_list'),
+    path('profile/', views.profile, name='profile'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

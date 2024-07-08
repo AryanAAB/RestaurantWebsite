@@ -11,11 +11,14 @@
         <p class="restaurant-name">Delicious Bites Menu</p>
         <div class="header-right">
             {% if user.is_authenticated %}
+                <a class="active view-cart" href="{% url 'view_cart' %}">View Cart</a>
+                <a class="active view-cart" href="{% url 'order_list' %}">View Orders</a>
+                <a class="active view-cart" href="{% url 'profile' %}">View Profile</a>
                 <form action="{% url 'logout_view' %}" method="post" class="inline-form">
                     {% csrf_token %}
                     <button type="submit" class="logout-button">Logout</button>
                 </form>
-                <a class="active view-cart" href="{% url 'view_cart' %}">View Cart</a>
+                
             {% endif %}
         </div>
     </div>
@@ -41,29 +44,13 @@
                             <p class="card-text" style="color: red;">Price: ${{ item.price }}</p>
                         </div>
                         <div class="card-footer">
-                            <form action="{% url 'add_to_cart' item.id %}" method="post">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-primary btn-block">Add to Cart</button>
-                            </form>
+                            <button type="submit" data-item-id="{{ item.id }}" class="btn btn-primary btn-block add-to-cart-button">Add to Cart</button>
                         </div>
                     </div>
                 </div>
             {% endfor %}
         </div>
     </div>
-
-    {% if messages %}
-        <div id="messages" class="message-container">
-            {% for message in messages %}
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
     
     <style>
         .message-container {
@@ -76,4 +63,28 @@
             margin-bottom: 10px;
         }
     </style>
+
+    <script>
+        $(document).ready(function() {
+            $('.add-to-cart-button').click(function(event) {
+                event.preventDefault();
+
+                let itemId = $(this).data('item-id');
+                let url = `/add_to_cart/${itemId}/`;
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function(response) {
+                        toastr["success"](response.message);
+                    },
+                    error: function(response) {
+                        toastr["error"]("An error has occurred.");
+                    }
+                });
+            });
+        });
+    </script>
 {% endblock content %}

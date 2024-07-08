@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import MenuItem, Cart
+from .models import MenuItem, Cart, Order
 
 class MenuItemAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'price')
@@ -13,3 +13,8 @@ class CartAdmin(admin.ModelAdmin):
     list_filter = ('user', 'item')
 
 admin.site.register(Cart, CartAdmin)
+
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ('user', 'total_cost', 'created_at')
+
+admin.site.register(Order, OrderAdmin)

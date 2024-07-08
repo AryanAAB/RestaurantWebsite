@@ -16,14 +16,6 @@
     </div> 
     <div class="login-form-container text-center">
         <h2>Login</h2>
-        {% if invalid_credentials %}
-            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: fixed; top: 10px; right: 10px; z-index: 9999;">
-                Please check your username and password and try again.
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        {% endif %}
         <form method="post" class="login-form">
             {% csrf_token %}
             <div class="form-group">
@@ -37,4 +29,9 @@
             <button type="submit" class="btn btn-primary">Login</button>
         </form>
     </div>
+    {% if invalid_credentials %}
+        <script>
+                toastr.error('Username or password is incorrect.', 'Login Failed');
+        </script>
+    {% endif %}
 {% endblock content %}

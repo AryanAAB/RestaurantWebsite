@@ -1,0 +1,97 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="header">
+        <div class="logo-container">
+            <a href="{% url 'menu' %}" class="logo">
+                <img src="{% static 'images/logo.png' %}" alt="My Restaurant" class="logoImage">
+            </a>
+        </div>
+        <p class="restaurant-name">Delicious Bites Order History</p>
+        <div class="header-right">
+            {% if user.is_authenticated %}
+                <a class="active" href="{% url 'menu' %}">Menu Page</a>
+                <a class="active view-cart" href="{% url 'view_cart' %}">View Cart</a>
+                <a class="active view-cart" href="{% url 'profile' %}">View Profile</a>
+                <form action="{% url 'logout_view' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-button">Logout</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+    <div class="container mt-4">
+        {% for order in orders %}
+            <div class="order-box {% if forloop.first %}latest-order{% endif %}">
+                <h5>Order Date: {{ order.created_at }}</h5>
+                <table class="table table-hover {% if forloop.first %}latest-order-table{% endif %}">
+                    <thead>
+                      <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for item in order.items.all %}
+                      <tr>
+                        <td><img src="{{ item.menu_item.image.url }}" alt="{{ item.menu_item.name }}" class="order-item-image"></td>
+                        <td>{{ item.menu_item.name }}</td>
+                        <td>${{ item.menu_item.price }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>${{ item.total }}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                <h4 class="total-cost">Total Cost: ${{ order.total_cost }}</h4>
+            </div>
+        {% empty %}
+            <p>You haven't ordered anything yet. Add items to the cart and then go to the cart to confirm your order.</p>
+        {% endfor %}
+    </div>
+
+    <style>
+        .order-box {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .latest-order {
+            background-color: green;
+            color: white;
+        }
+        .order-item-image {
+            height: 100px;
+            width: 100px;
+            object-fit: cover;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        th:hover {
+            background-color: lightblue;
+        }
+        .latest-order-table td {
+            color: white;
+        }
+        .total-cost {
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: right;
+        }
+    </style>
+{% endblock content %}
